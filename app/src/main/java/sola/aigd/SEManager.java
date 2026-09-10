@@ -2,16 +2,19 @@ package sola.aigd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SEManager {
     private static final String PREF_NAME = "cipher_prefs";
     private static final String KEY_SEARCH_ENGINE = "search_engine";
+    private static final String KEY_SHOW_ADULT = "show_adult";
 
     private static SEManager instance;
     private final Context context;
-    private String[] engineNames;
-    private String[] engineUrls;
-    private String[] engineHomeUrls;
+    private final List<Engine> allEngines = new ArrayList<>();
     private int currentIndex;
 
     private SEManager(Context context) {
@@ -21,168 +24,114 @@ public class SEManager {
     }
 
     public static synchronized SEManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new SEManager(context);
-        }
+        if (instance == null) instance = new SEManager(context);
         return instance;
     }
 
+    private void add(String name, String search, String home, String cat, boolean adult) {
+        allEngines.add(new Engine(name, search, home, cat, adult));
+    }
+
     private void initializeEngines() {
-        engineNames = new String[]{
-                "Google", "Bing", "DuckDuckGo", "Yahoo", "Brave", "Ecosia",
-                "Startpage", "Qwant", "Yandex", "Baidu", "Perplexity", "You.com",
-                "Kagi", "Mojeek", "Swisscows", "MetaGer", "Neeva", "Gibiru",
-                "Dogpile", "AOL", "Ask", "Lycos", "WebCrawler", "Excite",
+        allEngines.clear();
 
-                // === 18+ Adult Search Engines ===
-                "Pornhub", "XVideos", "XNXX", "YouPorn", "RedTube", "xHamster",
-                "PornTrex", "SpankBang", "Eporner", "PornDude", "PornGalaxy",
-                "Sex.com", "Tube8", "Porn00", "AdultSearch", "PornSearchEngine",
-                "LustySearch", "AdultWeb", "Bing NSFW", "Google NSFW Mode",
-                "DuckDuckGo NSFW", "ThotHub", "OnlyFans Search", "Fansly Search",
-                "ManyVids", "PornWhite", "HQPorner", "PornKai", "PornTastic"
-        };
+        // ===== GENERAL =====
+        add("Google", "https://www.google.com/search?q=", "https://www.google.com", "general", false);
+        add("Bing", "https://www.bing.com/search?q=", "https://www.bing.com", "general", false);
+        add("Yahoo", "https://search.yahoo.com/search?p=", "https://www.yahoo.com", "general", false);
+        add("Yandex", "https://yandex.com/search/?text=", "https://yandex.com", "general", false);
+        add("Baidu", "https://www.baidu.com/s?wd=", "https://www.baidu.com", "general", false);
+        add("AOL", "https://search.aol.com/aol/search?q=", "https://search.aol.com", "general", false);
+        add("Ask", "https://www.ask.com/web?q=", "https://www.ask.com", "general", false);
+        add("Ecosia", "https://www.ecosia.org/search?q=", "https://www.ecosia.org", "general", false);
+        add("Lycos", "https://search.lycos.com/web?q=", "https://www.lycos.com", "general", false);
+        add("Dogpile", "https://www.dogpile.com/search/web?q=", "https://www.dogpile.com", "general", false);
+        add("WebCrawler", "https://www.webcrawler.com/search/web?q=", "https://www.webcrawler.com", "general", false);
+        add("Excite", "https://www.excite.com/search?q=", "https://www.excite.com", "general", false);
 
-        engineUrls = new String[]{
-                "https://www.google.com/search?q=",
-                "https://www.bing.com/search?q=",
-                "https://duckduckgo.com/?q=",
-                "https://search.yahoo.com/search?p=",
-                "https://search.brave.com/search?q=",
-                "https://www.ecosia.org/search?q=",
-                "https://www.startpage.com/sp/search?query=",
-                "https://www.qwant.com/?q=",
-                "https://yandex.com/search/?text=",
-                "https://www.baidu.com/s?wd=",
-                "https://www.perplexity.ai/search?q=",
-                "https://you.com/search?q=",
-                "https://kagi.com/search?q=",
-                "https://www.mojeek.com/search?q=",
-                "https://swisscows.com/web?query=",
-                "https://metager.org/meta/meta.ger3?eingabe=",
-                "https://neeva.com/search?q=",
-                "https://gibiru.com/results.html?q=",
-                "https://www.dogpile.com/search/web?q=",
-                "https://search.aol.com/aol/search?q=",
-                "https://www.ask.com/web?q=",
-                "https://search.lycos.com/web?q=",
-                "https://www.webcrawler.com/search/web?q=",
-                "https://www.excite.com/search?q=",
+        // ===== PRIVACY =====
+        add("DuckDuckGo", "https://duckduckgo.com/?q=", "https://duckduckgo.com", "privacy", false);
+        add("Brave", "https://search.brave.com/search?q=", "https://search.brave.com", "privacy", false);
+        add("Startpage", "https://www.startpage.com/sp/search?query=", "https://www.startpage.com", "privacy", false);
+        add("Qwant", "https://www.qwant.com/?q=", "https://www.qwant.com", "privacy", false);
+        add("Mojeek", "https://www.mojeek.com/search?q=", "https://www.mojeek.com", "privacy", false);
+        add("Swisscows", "https://swisscows.com/web?query=", "https://swisscows.com", "privacy", false);
+        add("MetaGer", "https://metager.org/meta/meta.ger3?eingabe=", "https://metager.org", "privacy", false);
+        add("Gibiru", "https://gibiru.com/results.html?q=", "https://gibiru.com", "privacy", false);
 
-                // === 18+ Adult Search URLs ===
-                "https://www.pornhub.com/video/search?search=",
-                "https://www.xvideos.com/?k=",
-                "https://www.xnxx.com/search/",
-                "https://www.youporn.com/search/?query=",
-                "https://www.redtube.com/results?search=",
-                "https://xhamster.com/search/",
-                "https://www.porntrex.com/search/",
-                "https://spankbang.com/s/",
-                "https://www.eporner.com/search/",
-                "https://theporndude.com/search?q=",
-                "https://www.porngalaxy.com/search/",
-                "https://www.sex.com/search/videos/",
-                "https://www.tube8.com/search.php?q=",
-                "https://porn00.org/search/",
-                "https://adultsearch.com/",
-                "https://www.pornsearchengine.com/search?q=",
-                "https://lustysearch.com/search?q=",
-                "https://www.adultweb.com/search/",
-                "https://www.bing.com/search?q=",
-                "https://www.google.com/search?q=",
-                "https://duckduckgo.com/?q=",
-                "https://thothub.tv/search/",
-                "https://onlyfans.com/search?q=",
-                "https://fansly.com/search?q=",
-                "https://www.manyvids.com/search?q=",
-                "https://pornwhite.com/search/",
-                "https://hqporner.com/search/",
-                "https://www.pornkai.com/search/",
-                "https://porntastic.com/search/"
-        };
+        // ===== AI & NEW =====
+        add("Perplexity", "https://www.perplexity.ai/search?q=", "https://www.perplexity.ai", "ai", false);
+        add("You.com", "https://you.com/search?q=", "https://you.com", "ai", false);
+        add("Andi", "https://andisearch.com/search?q=", "https://andisearch.com", "ai", false);
+        add("Phind", "https://www.phind.com/search?q=", "https://www.phind.com", "ai", false);
+        add("Kagi", "https://kagi.com/search?q=", "https://kagi.com", "ai", false);
+        add("Neeva", "https://neeva.com/search?q=", "https://neeva.com", "ai", false);
+        add("Arc Search", "https://arc.net/search?q=", "https://arc.net", "ai", false);
 
-        engineHomeUrls = new String[]{
-                "https://www.google.com",
-                "https://www.bing.com",
-                "https://duckduckgo.com",
-                "https://www.yahoo.com",
-                "https://search.brave.com",
-                "https://www.ecosia.org",
-                "https://www.startpage.com",
-                "https://www.qwant.com",
-                "https://yandex.com",
-                "https://www.baidu.com",
-                "https://www.perplexity.ai",
-                "https://you.com",
-                "https://kagi.com",
-                "https://www.mojeek.com",
-                "https://swisscows.com",
-                "https://metager.org",
-                "https://neeva.com",
-                "https://gibiru.com",
-                "https://www.dogpile.com",
-                "https://search.aol.com",
-                "https://www.ask.com",
-                "https://search.lycos.com",
-                "https://www.webcrawler.com",
-                "https://www.excite.com",
+        // ===== TECH / SPECIAL =====
+        add("Wikipedia", "https://en.wikipedia.org/wiki/Special:Search?search=", "https://wikipedia.org", "tech", false);
+        add("GitHub", "https://github.com/search?q=", "https://github.com", "tech", false);
+        add("StackOverflow", "https://stackoverflow.com/search?q=", "https://stackoverflow.com", "tech", false);
+        add("YouTube", "https://www.youtube.com/results?search_query=", "https://youtube.com", "tech", false);
+        add("Reddit", "https://www.reddit.com/search/?q=", "https://www.reddit.com", "tech", false);
+        add("Wolfram", "https://www.wolframalpha.com/input?i=", "https://www.wolframalpha.com", "tech", false);
+        add("Archive.org", "https://archive.org/search?query=", "https://archive.org", "tech", false);
 
-                // === 18+ Adult Home URLs ===
-                "https://www.pornhub.com",
-                "https://www.xvideos.com",
-                "https://www.xnxx.com",
-                "https://www.youporn.com",
-                "https://www.redtube.com",
-                "https://xhamster.com",
-                "https://www.porntrex.com",
-                "https://spankbang.com",
-                "https://www.eporner.com",
-                "https://theporndude.com",
-                "https://www.porngalaxy.com",
-                "https://www.sex.com",
-                "https://www.tube8.com",
-                "https://porn00.org",
-                "https://adultsearch.com",
-                "https://www.pornsearchengine.com",
-                "https://lustysearch.com",
-                "https://www.adultweb.com",
-                "https://www.bing.com",
-                "https://www.google.com",
-                "https://duckduckgo.com",
-                "https://thothub.tv",
-                "https://onlyfans.com",
-                "https://fansly.com",
-                "https://www.manyvids.com",
-                "https://pornwhite.com",
-                "https://hqporner.com",
-                "https://www.pornkai.com",
-                "https://porntastic.com"
-        };
+        // ===== ADULT - 30+ =====
+        add("Pornhub", "https://www.pornhub.com/video/search?search=", "https://www.pornhub.com", "adult", true);
+        add("XVideos", "https://www.xvideos.com/?k=", "https://www.xvideos.com", "adult", true);
+        add("XNXX", "https://www.xnxx.com/search/", "https://www.xnxx.com", "adult", true);
+        add("YouPorn", "https://www.youporn.com/search/?query=", "https://www.youporn.com", "adult", true);
+        add("RedTube", "https://www.redtube.com/results?search=", "https://www.redtube.com", "adult", true);
+        add("xHamster", "https://xhamster.com/search/", "https://xhamster.com", "adult", true);
+        add("SpankBang", "https://spankbang.com/s/", "https://spankbang.com", "adult", true);
+        add("Eporner", "https://www.eporner.com/search/", "https://www.eporner.com", "adult", true);
+        add("HQPorner", "https://hqporner.com/search/", "https://hqporner.com", "adult", true);
+        add("Porn00", "https://porn00.org/search/", "https://porn00.org", "adult", true);
+        add("Tube8", "https://www.tube8.com/search.php?q=", "https://www.tube8.com", "adult", true);
+        add("PornKai", "https://www.pornkai.com/search/", "https://www.pornkai.com", "adult", true);
+        add("PornTastic", "https://porntastic.com/search/", "https://porntastic.com", "adult", true);
+        add("PornTrex", "https://www.porntrex.com/search/", "https://www.porntrex.com", "adult", true);
+        add("Sex.com", "https://www.sex.com/search/videos/", "https://www.sex.com", "adult", true);
+        add("OnlyFans Search", "https://onlyfans.com/search?q=", "https://onlyfans.com", "adult", true);
+        add("Fansly Search", "https://fansly.com/search?q=", "https://fansly.com", "adult", true);
+        add("ManyVids", "https://www.manyvids.com/search?q=", "https://www.manyvids.com", "adult", true);
+        add("ThotHub", "https://thothub.tv/search/", "https://thothub.tv", "adult", true);
+        add("PornGalaxy", "https://www.porngalaxy.com/search/", "https://www.porngalaxy.com", "adult", true);
+        add("ThePornDude", "https://theporndude.com/search?q=", "https://theporndude.com", "adult", true);
+        add("SpankWire", "https://www.spankwire.com/search/", "https://www.spankwire.com", "adult", true);
+        add("DrTuber", "https://www.drtuber.com/search/videos/", "https://www.drtuber.com", "adult", true);
+        add("NudeVista", "https://www.nudevista.com/search?q=", "https://www.nudevista.com", "adult", true);
+        add("PornWhite", "https://pornwhite.com/search/", "https://pornwhite.com", "adult", true);
+        add("SunPorno", "https://www.sunporno.com/search/", "https://www.sunporno.com", "adult", true);
+        add("PornBadoo", "https://www.pornbadoo.com/search/", "https://www.pornbadoo.com", "adult", true);
     }
 
-    private void loadSavedEngine() {
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        currentIndex = prefs.getInt(KEY_SEARCH_ENGINE, 0);
-    }
-
+    // ===== OLD API - FOR YOUR EXISTING CODE =====
     public String[] getEngineNames() {
-        return engineNames;
+        List<Engine> list = getFilteredEngines();
+        String[] arr = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i).name;
+        return arr;
     }
 
     public String[] getEngineUrls() {
-        return engineUrls;
+        List<Engine> list = getFilteredEngines();
+        String[] arr = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i).searchUrl;
+        return arr;
     }
 
     public String getCurrentEngineName() {
-        return engineNames[currentIndex];
+        return getFilteredEngines().get(currentIndex).name;
     }
 
     public String getCurrentEngineUrl() {
-        return engineUrls[currentIndex];
+        return getFilteredEngines().get(currentIndex).searchUrl;
     }
 
     public String getCurrentEngineHomeUrl() {
-        return engineHomeUrls[currentIndex];
+        return getFilteredEngines().get(currentIndex).homeUrl;
     }
 
     public int getCurrentEngineIndex() {
@@ -190,7 +139,8 @@ public class SEManager {
     }
 
     public void setCurrentEngineIndex(int index) {
-        if (index >= 0 && index < engineNames.length) {
+        List<Engine> list = getFilteredEngines();
+        if (index >= 0 && index < list.size()) {
             currentIndex = index;
             SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
             prefs.edit().putInt(KEY_SEARCH_ENGINE, index).apply();
@@ -198,27 +148,77 @@ public class SEManager {
     }
 
     public String buildSearchUrl(String query) {
-        return engineUrls[currentIndex] + android.net.Uri.encode(query);
+        return getFilteredEngines().get(currentIndex).searchUrl + Uri.encode(query);
     }
 
     public String getEngineHomeUrl(int index) {
-        if (index >= 0 && index < engineHomeUrls.length) {
-            return engineHomeUrls[index];
-        }
-        return engineHomeUrls[0];
+        return getFilteredEngines().get(index).homeUrl;
     }
 
     public String getEngineUrl(int index) {
-        if (index >= 0 && index < engineUrls.length) {
-            return engineUrls[index];
-        }
-        return engineUrls[0];
+        return getFilteredEngines().get(index).searchUrl;
     }
 
     public String getEngineName(int index) {
-        if (index >= 0 && index < engineNames.length) {
-            return engineNames[index];
+        return getFilteredEngines().get(index).name;
+    }
+
+    // ===== NEW API - MORE POWERFUL =====
+    public List<Engine> getAllEngines() {
+        return allEngines;
+    }
+
+    public List<Engine> getFilteredEngines() {
+        boolean showAdult = isAdultEnabled();
+        if (showAdult) return allEngines;
+        List<Engine> filtered = new ArrayList<>();
+        for (Engine e : allEngines) if (!e.isAdult) filtered.add(e);
+        return filtered;
+    }
+
+    public List<Engine> getEnginesByCategory(String category) {
+        List<Engine> out = new ArrayList<>();
+        for (Engine e : getFilteredEngines()) if (e.category.equalsIgnoreCase(category)) out.add(e);
+        return out;
+    }
+
+    public Engine getEngine(int index) {
+        return getFilteredEngines().get(index);
+    }
+
+    public boolean isAdultEnabled() {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getBoolean(KEY_SHOW_ADULT, true); // true by default
+    }
+
+    public void setAdultEnabled(boolean enabled) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(KEY_SHOW_ADULT, enabled).apply();
+        if (!enabled && getFilteredEngines().get(currentIndex).isAdult) {
+            currentIndex = 0;
+            prefs.edit().putInt(KEY_SEARCH_ENGINE, 0).apply();
         }
-        return engineNames[0];
+    }
+
+    private void loadSavedEngine() {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        currentIndex = prefs.getInt(KEY_SEARCH_ENGINE, 0);
+        if (currentIndex >= getFilteredEngines().size()) currentIndex = 0;
+    }
+
+    public static class Engine {
+        public String name;
+        public String searchUrl;
+        public String homeUrl;
+        public String category; // general, privacy, ai, adult, tech
+        public boolean isAdult;
+
+        public Engine(String name, String searchUrl, String homeUrl, String category, boolean isAdult) {
+            this.name = name;
+            this.searchUrl = searchUrl;
+            this.homeUrl = homeUrl;
+            this.category = category;
+            this.isAdult = isAdult;
+        }
     }
 }

@@ -1,24 +1,25 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Sola" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#1A2A6C</item>
-        <item name="colorPrimaryVariant">#0D1117</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimary">@color/b</item>
+        <item name="colorPrimaryVariant">@color/b</item>
+        <item name="colorOnPrimary">@color/f</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#3F51B5</item>
-        <item name="colorSecondaryVariant">#3F51B5</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondary">@color/b</item>
+        <item name="colorSecondaryVariant">@color/b</item>
+        <item name="colorOnSecondary">@color/f</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/b</item>
 
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/b</item>
 
         <!-- Window background. -->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/b</item>
 
         <!-- Customize your theme here. -->
     </style>

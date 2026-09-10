@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SOLA Browser - Data Manager
+ * Sola Browser - Data Manager
  * Handles all data persistence (Tabs, History, Bookmarks, Settings)
  * Created by Awan IGD
  */
@@ -21,7 +21,7 @@ public class DataManager {
     // ============================================================
     //  CONSTANTS
     // ============================================================
-    private static final String PREF_NAME = "sola_data";
+    private static final String PREF_NAME = "Sola_data";
 
     // Keys
     private static final String KEY_TABS = "tabs";

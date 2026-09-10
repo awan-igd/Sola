@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- ONLY USED PERMISSIONS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Camera optional - so app works on devices without autofocus camera -->
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"
-        android:required="true" />
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +23,6 @@
         android:roundIcon="@drawable/ic_sola"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sola">
-
         <meta-data
             android:name="com.startapp.sdk.APPLICATION_ID"
             android:value="206114604" />
@@ -34,75 +33,69 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.APP_BROWSER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".HomeActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
+
+            <!-- For opening links from other apps + set as default browser -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:scheme="https" />
             </intent-filter>
+            <!-- For web search intent -->
             <intent-filter>
                 <action android:name="android.intent.action.WEB_SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <!-- Custom scheme Sola:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="text/html" />
-                <data android:mimeType="application/pdf" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="sola" />
-                <data android:scheme="https" />
-                <data android:scheme="http" />
+
+                <data android:scheme="Sola" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".HistoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".PrivacyActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".QRActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".TabActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".AboutActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
+        <activity
+            android:name=".AISearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

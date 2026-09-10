@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 /**
- * SOLA Browser - Web Router
+ * Sola Browser - Web Router
  * Handles all navigation and URL routing
  * Created by Awan IGD
  */

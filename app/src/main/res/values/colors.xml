@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary / Foreground - Chrome-inspired blue -->
+    <color name="f">#4285F4</color>
+    <!-- Background - Warm off-white for reading comfort -->
+    <color name="b">#FFFFFF</color>
+    <!-- Text - Soft dark for readability -->
+    <color name="t">#202124</color>
+</resources>

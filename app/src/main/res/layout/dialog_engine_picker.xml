@@ -1,139 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_filled"
-    android:elevation="20dp"
-    android:orientation="vertical"
-    android:padding="0dp">
+    app:cardBackgroundColor="@color/b"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_topbar"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="24dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="16dp">
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_circle_outline"
-            android:gravity="center">
+        <!-- Handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_handle"
+            android:alpha="0.15" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_search"
-                app:tint="#00D2FF" />
-
-        </FrameLayout>
-
+        <!-- Header - ONE SIDE LEFT -->
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/aigd"
-                android:text="Search Engine"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.6"
-                android:fontFamily="@font/aigd"
-                android:text="Choose your preferred search"
-                android:textColor="#B0BEC5"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/bg_circle_outline"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
-            android:src="@drawable/ic_close"
-            app:tint="#FFFFFF" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/bg_divider" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/engineListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="22dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="14dp">
 
-    </ScrollView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                app:cardBackgroundColor="@color/f"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="14dp">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_sola"
+                    />
+            </androidx.cardview.widget.CardView>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/aigd"
+                    android:letterSpacing="0.02"
+                    android:text="Search Engine"
+                    android:textColor="@color/t"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.5"
+                    android:fontFamily="@font/aigd"
+                    android:text="Choose where you want to search"
+                    android:textColor="@color/t"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/closeBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:cardBackgroundColor="@color/b"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/f"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/f" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Thin Divider -->
         <View
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="24dp"
-            android:layout_weight="1"
-            android:alpha="0.1"
-            android:background="#FFFFFF" />
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="22dp"
+            android:alpha="0.08"
+            android:background="@color/f" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Engine List -->
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:alpha="0.3"
-            android:fontFamily="@font/aigd"
-            android:letterSpacing="0.15"
-            android:text="Sola • Awan IGD"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="6dp"
+            android:scrollbars="none">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="24dp"
-            android:layout_weight="1"
-            android:alpha="0.1"
-            android:background="#FFFFFF" />
+            <LinearLayout
+                android:id="@+id/engineListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="10dp" />
+        </ScrollView>
+
+        <!-- Footer Line -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:paddingTop="4dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="22dp"
+                android:layout_weight="1"
+                android:alpha="0.08"
+                android:background="@color/f" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:alpha="0.35"
+                android:fontFamily="@font/aigd"
+                android:text="Sola • PRIVATE"
+                android:textColor="@color/t"
+                android:textSize="9sp"
+                android:letterSpacing="0.12" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="22dp"
+                android:layout_weight="1"
+                android:alpha="0.08"
+                android:background="@color/f" />
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

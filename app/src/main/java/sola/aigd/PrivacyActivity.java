@@ -1,22 +1,16 @@
 package sola.aigd;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,299 +21,148 @@ import com.startapp.sdk.ads.banner.BannerListener;
 
 import java.io.File;
 
+import sola.aigd.R;
+
 public class PrivacyActivity extends AppCompatActivity {
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
-    private LinearLayout backButton;
-    private LinearLayout clearHistoryOption, clearCookiesOption;
-    private LinearLayout clearCacheOption, clearAllOption;
-    private AnimatedBackground animatedBackground;
-
-    private LinearLayout bottomAdContainer;
+    private CardView backButton, clearHistoryOption, clearCookiesOption, clearCacheOption, clearAllOption;
     private Banner bannerAd;
     private ProgressBar adLoader;
     private TextView adLabel;
-
+    private View topBar;
     private DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
-
-        setupFullScreenWindow();
-        initializeCore();
+        setupWindow();
+        dataManager = DataManager.getInstance(this);
         initViews();
-        setupAnimatedBackground();
-        setupWindowInsets();
-        setupClickListeners();
-        loadBannerAd();
+        setupInsets();
+        setupClicks();
+        loadAd();
+        startAnim();
     }
 
-    private void initializeCore() {
-        dataManager = DataManager.getInstance(this);
+    private void setupWindow() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+        WindowInsetsControllerCompat c = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (c != null) {
+            c.setAppearanceLightStatusBars(true);
+            c.setAppearanceLightNavigationBars(true);
+        }
+    }
+
+    private void setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(topBar, (v, ins) -> {
+            int top = ins.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), top + 12, v.getPaddingRight(), 12);
+            return ins;
+        });
     }
 
     private void initViews() {
+        topBar = findViewById(R.id.topBar);
         backButton = findViewById(R.id.backButton);
         clearHistoryOption = findViewById(R.id.clearHistoryOption);
         clearCookiesOption = findViewById(R.id.clearCookiesOption);
         clearCacheOption = findViewById(R.id.clearCacheOption);
         clearAllOption = findViewById(R.id.clearAllOption);
-        animatedBackground = findViewById(R.id.animatedBackground);
-        bottomAdContainer = findViewById(R.id.bottomAdContainer);
         bannerAd = findViewById(R.id.bannerAd);
         adLoader = findViewById(R.id.adLoader);
         adLabel = findViewById(R.id.adLabel);
     }
 
-    private void setupFullScreenWindow() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
-
-        WindowInsetsControllerCompat controller =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (controller != null) {
-            controller.setAppearanceLightStatusBars(false);
-            controller.setAppearanceLightNavigationBars(false);
-        }
-
-        getWindow().setFlags(
-                android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-        );
-    }
-
-    private void setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.topBar), (v, insets) -> {
-            int statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            v.setPadding(v.getPaddingLeft(), statusBarHeight, v.getPaddingRight(), v.getPaddingBottom());
-            return insets;
-        });
-    }
-
-    private void setupAnimatedBackground() {
-        if (animatedBackground != null) {
-            animatedBackground.setWaveSpeed(5000);
-            animatedBackground.resumeAnimation();
-        }
-    }
-
-    private void loadBannerAd() {
-        if (bannerAd == null) return;
-
-        adLoader.setVisibility(View.VISIBLE);
-        bannerAd.setVisibility(View.GONE);
-        adLabel.setVisibility(View.GONE);
-
-        bannerAd.setBannerListener(new BannerListener() {
-            @Override
-            public void onReceiveAd(View banner) {
-                adLoader.setVisibility(View.GONE);
-                bannerAd.setVisibility(View.VISIBLE);
-                adLabel.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onFailedToReceiveAd(View banner) {
-                adLoader.setVisibility(View.GONE);
-                bannerAd.setVisibility(View.GONE);
-                adLabel.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onImpression(View banner) {}
-
-            @Override
-            public void onClick(View banner) {}
-        });
-
-        bannerAd.loadAd();
-    }
-
-    private void setupClickListeners() {
+    private void setupClicks() {
         backButton.setOnClickListener(v -> {
-            animateButtonClick(backButton);
-            finishWithAnimation();
+            anim(v);
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
-
         clearHistoryOption.setOnClickListener(v -> {
-            animateButtonClick(clearHistoryOption);
-            showClearDialog("Clear History",
-                    "Are you sure you want to clear all browsing history?",
-                    () -> {
-                        dataManager.clearHistory();
-                        showToast("History cleared");
-                    });
+            anim(v);
+            dataManager.clearHistory();
+            Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show();
         });
-
         clearCookiesOption.setOnClickListener(v -> {
-            animateButtonClick(clearCookiesOption);
-            showClearDialog("Clear Cookies",
-                    "Are you sure you want to clear all cookies?",
-                    () -> {
-                        android.webkit.CookieManager.getInstance().removeAllCookies(null);
-                        showToast("Cookies cleared");
-                    });
+            anim(v);
+            android.webkit.CookieManager.getInstance().removeAllCookies(null);
+            android.webkit.CookieManager.getInstance().flush();
+            Toast.makeText(this, "Cookies cleared", Toast.LENGTH_SHORT).show();
         });
-
         clearCacheOption.setOnClickListener(v -> {
-            animateButtonClick(clearCacheOption);
-            showClearDialog("Clear Cache",
-                    "Are you sure you want to clear all cache?",
-                    () -> {
-                        clearWebViewCache();
-                        showToast("Cache cleared");
-                    });
+            anim(v);
+            deleteDir(getCacheDir());
+            Toast.makeText(this, "Cache cleared", Toast.LENGTH_SHORT).show();
         });
-
         clearAllOption.setOnClickListener(v -> {
-            animateButtonClick(clearAllOption);
-            showClearDialog("Clear All Data",
-                    "Are you sure you want to clear all browsing data?\n\nThis will clear:\n• History\n• Cookies\n• Cache\n• Tabs\n• Downloads\n• Bookmarks",
-                    () -> {
-                        dataManager.clearAllData();
-                        android.webkit.CookieManager.getInstance().removeAllCookies(null);
-                        clearWebViewCache();
-                        showToast("All data cleared");
-                    });
+            anim(v);
+            dataManager.clearAllData();
+            android.webkit.CookieManager.getInstance().removeAllCookies(null);
+            deleteDir(getCacheDir());
+            Toast.makeText(this, "All data cleared", Toast.LENGTH_SHORT).show();
         });
-    }
-
-    private void showClearDialog(String title, String message, Runnable onConfirm) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_clear_tabs, null);
-        builder.setView(dialogView);
-
-        AlertDialog dialog = builder.create();
-
-        TextView titleView = dialogView.findViewById(R.id.dialogTitle);
-        TextView messageView = dialogView.findViewById(R.id.dialogMessage);
-        TextView positiveBtn = dialogView.findViewById(R.id.positiveBtn);
-        TextView negativeBtn = dialogView.findViewById(R.id.negativeBtn);
-
-        if (titleView != null) titleView.setText(title);
-        if (messageView != null) messageView.setText(message);
-
-        positiveBtn.setOnClickListener(v -> {
-            animateButtonClick(positiveBtn);
-            if (onConfirm != null) {
-                onConfirm.run();
-            }
-            dialog.dismiss();
-        });
-
-        negativeBtn.setOnClickListener(v -> {
-            animateButtonClick(negativeBtn);
-            dialog.dismiss();
-        });
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            dialog.getWindow().setLayout(
-                    (int) (getResources().getDisplayMetrics().widthPixels * 0.85),
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-        }
-
-        dialog.show();
-    }
-
-    private void clearWebViewCache() {
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                android.webkit.CookieManager.getInstance().flush();
-            }
-            clearCacheDir();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void clearCacheDir() {
-        try {
-            File cacheDir = getCacheDir();
-            if (cacheDir != null && cacheDir.isDirectory()) {
-                deleteDir(cacheDir);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            if (children != null) {
-                for (String child : children) {
-                    boolean success = deleteDir(new File(dir, child));
-                    if (!success) {
-                        return false;
-                    }
-                }
-            }
+            String[] ch = dir.list();
+            if (ch != null) for (String c : ch) deleteDir(new File(dir, c));
             return dir.delete();
-        } else if (dir != null && dir.isFile()) {
-            return dir.delete();
-        }
+        } else if (dir != null && dir.isFile()) return dir.delete();
         return false;
     }
 
-    private void animateButtonClick(View button) {
-        button.animate()
-                .scaleX(0.9f)
-                .scaleY(0.9f)
-                .setDuration(100)
-                .withEndAction(() -> button.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(100)
-                        .start())
-                .start();
+    private void startAnim() {
+        topBar.setAlpha(0f);
+        topBar.setTranslationY(-30f);
+        topBar.animate().alpha(1f).translationY(0f).setDuration(350).setInterpolator(new AccelerateDecelerateInterpolator()).start();
     }
 
-    private void finishWithAnimation() {
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    private void anim(View v) {
+        v.animate().scaleX(0.94f).scaleY(0.94f).setDuration(80).withEndAction(() -> v.animate().scaleX(1f).scaleY(1f).setDuration(120).start()).start();
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
+    private void loadAd() {
+        if (bannerAd == null) return;
+        if (adLoader != null) adLoader.setVisibility(View.VISIBLE);
+        bannerAd.setVisibility(View.GONE);
+        bannerAd.setBannerListener(new BannerListener() {
+            @Override
+            public void onReceiveAd(View b) {
+                if (adLoader != null) adLoader.setVisibility(View.GONE);
+                bannerAd.setVisibility(View.VISIBLE);
+                if (adLabel != null) adLabel.setVisibility(View.VISIBLE);
+            }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (animatedBackground != null) {
-            animatedBackground.resumeAnimation();
-        }
-    }
+            @Override
+            public void onFailedToReceiveAd(View b) {
+                if (adLoader != null) adLoader.setVisibility(View.GONE);
+            }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (animatedBackground != null) {
-            animatedBackground.pauseAnimation();
-        }
-    }
+            @Override
+            public void onImpression(View b) {
+            }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-        if (animatedBackground != null) {
-            animatedBackground.stopBackgroundAnimation();
+            @Override
+            public void onClick(View b) {
+            }
+        });
+        try {
+            bannerAd.loadAd();
+        } catch (Exception e) {
+            if (adLoader != null) adLoader.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onBackPressed() {
-        finishWithAnimation();
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

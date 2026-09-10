@@ -19,7 +19,7 @@ import android.view.animation.LinearInterpolator;
 import java.util.Random;
 
 /**
- * SOLA Browser - Premium Animated Background v4.0
+ * Sola Browser - Premium Animated Background v4.0
  * ✅ FULLY AUTOMATIC COLOR CHANGING - NEVER STOPS
  * ✅ NO CRASHES - PERFECT ERROR HANDLING
  * ✅ ALL METHODS INCLUDED - COMPATIBLE WITH ALL ACTIVITIES
@@ -30,41 +30,41 @@ import java.util.Random;
 public class AnimatedBackground extends View {
 
     // ============================================================
-    //  SOLA BRAND COLORS
+    //  Sola BRAND COLORS
     // ============================================================
-    private static final int SOLA_PRIMARY = Color.parseColor("#1A2A6C");
-    private static final int SOLA_SECONDARY = Color.parseColor("#11998E");
-    private static final int SOLA_ACCENT = Color.parseColor("#00D2FF");
-    private static final int SOLA_PURPLE = Color.parseColor("#667EEA");
-    private static final int SOLA_VIOLET = Color.parseColor("#764BA2");
-    private static final int SOLA_GOLD = Color.parseColor("#FFD700");
-    private static final int SOLA_PINK = Color.parseColor("#FF6B6B");
-    private static final int SOLA_MINT = Color.parseColor("#4ECDC4");
-    private static final int SOLA_ORANGE = Color.parseColor("#FF8C42");
-    private static final int SOLA_LIME = Color.parseColor("#A8E6CF");
-    private static final int SOLA_ROSE = Color.parseColor("#FF6B8A");
-    private static final int SOLA_INDIGO = Color.parseColor("#4A00E0");
-    private static final int SOLA_TEAL = Color.parseColor("#00B4D8");
-    private static final int SOLA_LAVENDER = Color.parseColor("#B8A9C9");
-    private static final int SOLA_CORAL = Color.parseColor("#FF7F50");
-    private static final int SOLA_AMBER = Color.parseColor("#FFBF00");
-    private static final int SOLA_EMERALD = Color.parseColor("#50C878");
+    private static final int Sola_PRIMARY = Color.parseColor("#1A2A6C");
+    private static final int Sola_SECONDARY = Color.parseColor("#11998E");
+    private static final int Sola_ACCENT = Color.parseColor("#00D2FF");
+    private static final int Sola_PURPLE = Color.parseColor("#667EEA");
+    private static final int Sola_VIOLET = Color.parseColor("#764BA2");
+    private static final int Sola_GOLD = Color.parseColor("#FFD700");
+    private static final int Sola_PINK = Color.parseColor("#FF6B6B");
+    private static final int Sola_MINT = Color.parseColor("#4ECDC4");
+    private static final int Sola_ORANGE = Color.parseColor("#FF8C42");
+    private static final int Sola_LIME = Color.parseColor("#A8E6CF");
+    private static final int Sola_ROSE = Color.parseColor("#FF6B8A");
+    private static final int Sola_INDIGO = Color.parseColor("#4A00E0");
+    private static final int Sola_TEAL = Color.parseColor("#00B4D8");
+    private static final int Sola_LAVENDER = Color.parseColor("#B8A9C9");
+    private static final int Sola_CORAL = Color.parseColor("#FF7F50");
+    private static final int Sola_AMBER = Color.parseColor("#FFBF00");
+    private static final int Sola_EMERALD = Color.parseColor("#50C878");
 
     // ============================================================
     //  ENHANCED COLOR PALETTES
     // ============================================================
     private final int[] topColors = {
-            SOLA_PRIMARY, SOLA_ACCENT, SOLA_PURPLE,
-            SOLA_INDIGO, SOLA_VIOLET, SOLA_GOLD,
-            SOLA_TEAL, SOLA_LAVENDER, SOLA_AMBER,
-            SOLA_EMERALD, SOLA_ROSE, SOLA_ORANGE
+            Sola_PRIMARY, Sola_ACCENT, Sola_PURPLE,
+            Sola_INDIGO, Sola_VIOLET, Sola_GOLD,
+            Sola_TEAL, Sola_LAVENDER, Sola_AMBER,
+            Sola_EMERALD, Sola_ROSE, Sola_ORANGE
     };
 
     private final int[] bottomColors = {
-            SOLA_SECONDARY, SOLA_MINT, SOLA_ACCENT,
-            SOLA_PINK, SOLA_ORANGE, SOLA_LIME,
-            SOLA_ROSE, SOLA_CORAL, SOLA_GOLD,
-            SOLA_VIOLET, SOLA_TEAL, SOLA_LAVENDER
+            Sola_SECONDARY, Sola_MINT, Sola_ACCENT,
+            Sola_PINK, Sola_ORANGE, Sola_LIME,
+            Sola_ROSE, Sola_CORAL, Sola_GOLD,
+            Sola_VIOLET, Sola_TEAL, Sola_LAVENDER
     };
 
     private final Random random = new Random();
@@ -125,9 +125,9 @@ public class AnimatedBackground extends View {
     private float[] orbBaseX = new float[8];
     private float[] orbBaseY = new float[8];
     private int[] orbColors = {
-            SOLA_ACCENT, SOLA_VIOLET, SOLA_GOLD,
-            SOLA_PINK, SOLA_MINT, SOLA_ORANGE,
-            SOLA_PURPLE, SOLA_TEAL
+            Sola_ACCENT, Sola_VIOLET, Sola_GOLD,
+            Sola_PINK, Sola_MINT, Sola_ORANGE,
+            Sola_PURPLE, Sola_TEAL
     };
 
     // Particles
@@ -634,8 +634,8 @@ public class AnimatedBackground extends View {
                 }
 
                 int[] auroraColors = {
-                        blendColors(SOLA_ACCENT, SOLA_VIOLET, band / 3f),
-                        blendColors(SOLA_PURPLE, SOLA_MINT, band / 3f),
+                        blendColors(Sola_ACCENT, Sola_VIOLET, band / 3f),
+                        blendColors(Sola_PURPLE, Sola_MINT, band / 3f),
                         Color.TRANSPARENT
                 };
                 float[] positions = {0f, 0.3f, 1f};
@@ -825,9 +825,9 @@ public class AnimatedBackground extends View {
             float centerY = viewHeight * (0.3f + 0.2f * (float) Math.sin(glowPulse * Math.PI * 2));
 
             int[][] glowConfigs = {
-                    {SOLA_ACCENT, 15, 25},
-                    {SOLA_GOLD, 10, 15},
-                    {SOLA_PURPLE, 8, 12}
+                    {Sola_ACCENT, 15, 25},
+                    {Sola_GOLD, 10, 15},
+                    {Sola_PURPLE, 8, 12}
             };
 
             for (int g = 0; g < glowConfigs.length; g++) {

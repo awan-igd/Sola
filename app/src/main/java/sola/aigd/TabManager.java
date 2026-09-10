@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TabManager {
 
-    private static final String PREF_NAME = "sola_tabs";
+    private static final String PREF_NAME = "Sola_tabs";
     private static final String KEY_TAB_COUNT = "tab_count";
     private static final String KEY_TAB_PREFIX = "tab_";
     private static final String KEY_TAB_TITLE = "_title";
@@ -263,7 +263,7 @@ public class TabManager {
 
     public void resetToDefault() {
         clearAllData();
-        createNewTab("Welcome to SOLA", "https://www.google.com");
+        createNewTab("Welcome to Sola", "https://www.google.com");
     }
 
     public static class TabClass {
