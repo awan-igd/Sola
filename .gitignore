@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+reader_key.jks
+*.jks
+*.keystore
+key.properties

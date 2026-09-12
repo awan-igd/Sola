@@ -14,8 +14,8 @@ android {
         applicationId = "sola.aigd"
         minSdk = 24
         targetSdk = 36
-        versionCode = 4
-        versionName = "4"
+        versionCode = 3
+        versionName = "3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // For 16KB
