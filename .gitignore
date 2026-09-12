@@ -13,7 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
-reader_key.jks
+
+# Signing Keys and Sensitive Configs
 *.jks
 *.keystore
 key.properties
